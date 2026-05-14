@@ -1,0 +1,336 @@
+/* ─── Base ───────────────────────────────────────────────────
+   Full-height layout so the map fills the entire viewport
+──────────────────────────────────────────────────────────── */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#map-container {
+    height: 100%;
+    width: 100%;
+}
+
+/* ─── Side Panel ─────────────────────────────────────────────
+   Main UI panel shown after the banner is dismissed.
+   Contains the title, CTA, filters, stats, links, and
+   the back-to-background button. Hidden by default —
+   revealed in scripts.js after the user clicks Explore.
+──────────────────────────────────────────────────────────── */
+
+.side-panel {
+    position: absolute;
+    top: 16px;
+    left: 12px;
+    width: 220px;
+    background: rgba(13, 17, 23, 0.92);
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 16px;
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+}
+
+.panel-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e6edf3;
+    margin-bottom: 4px;
+}
+
+.panel-subtitle {
+    font-size: 16px;
+    color: #c9d1d9;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+/* Blue call-to-action prompting users to interact with the map */
+.panel-cta {
+    font-size: 14px;
+    color: #58a6ff;
+    margin-bottom: 24px;
+}
+
+/* Button that reopens the story banner from inside the panel */
+.panel-background-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #58a6ff;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 4px;
+}
+
+.panel-background-btn:hover {
+    background: rgba(88, 166, 255, 0.1);
+}
+
+/* Horizontal rule used to separate sections within the panel */
+.panel-divider {
+    border: none;
+    border-top: 1px solid #1c2430;
+    margin: 12px 0;
+}
+
+/* Section heading used above filters and learn more links */
+.panel-section-title {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #e6edf3;
+    margin-bottom: 8px;
+}
+
+/* ─── Filter Pills ───────────────────────────────────────────
+   Toggle buttons that show/hide each PACT status category.
+   Active state is full opacity; inactive is faded to 40%.
+   Clicking fires updateFilter() in scripts.js.
+──────────────────────────────────────────────────────────── */
+
+.panel-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.filter-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1.5px solid #444;
+    background: rgba(20, 20, 20, 0.85);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: 100%;
+}
+
+/* Faded appearance when a category is toggled off */
+.filter-pill:not(.active) {
+    opacity: 0.4;
+}
+
+/* Colored dot inside each filter pill matching the map circle color */
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* ─── Stats ──────────────────────────────────────────────────
+   Shows total and per-category development counts.
+   Counts update dynamically when filters are toggled.
+──────────────────────────────────────────────────────────── */
+
+.panel-stats {
+    margin-bottom: 24px;
+}
+
+.stats-total {
+    font-size: 14px;
+    font-weight: bold;
+    color: #c9d1d9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.stats-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.stats-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Colored dot matching the map circle color for each status */
+.stats-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.stats-label {
+    font-size: 14px;
+    color: #c9d1d9;
+    flex: 1;
+}
+
+.stats-count {
+    font-size: 14px;
+    font-weight: bold;
+    color: #c9d1d9;
+}
+
+/* ─── Learn More Links ───────────────────────────────────────
+   Outbound links to external resources about NYCHA and PACT.
+──────────────────────────────────────────────────────────── */
+
+.info-link {
+    display: block;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #58a6ff;
+    text-decoration: none;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.info-link:last-child {
+    margin-bottom: 0;
+}
+
+.info-link:hover {
+    text-decoration: underline;
+}
+
+/* ─── Popup ──────────────────────────────────────────────────
+   Styles the Mapbox popup that appears when a circle is clicked.
+   Uses !important to override Mapbox's injected default styles.
+──────────────────────────────────────────────────────────── */
+
+.mapboxgl-popup-content {
+    background: #0d1117 !important;
+    color: #c9d1d9 !important;
+    border: 1px solid #30363d !important;
+    border-radius: 8px !important;
+    padding: 12px 14px !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
+    line-height: 1.6;
+    min-width: 200px;
+}
+
+.mapboxgl-popup-tip {
+    border-top-color: #0d1117 !important;
+}
+
+.mapboxgl-popup-close-button {
+    color: #768390;
+    font-size: 16px;
+}
+
+/* ─── Story Banner ───────────────────────────────────────────
+   Full-screen overlay shown when the page first loads.
+   Provides context on NYCHA, PACT, and the map's purpose.
+   Dismissed by clicking the Explore button; can be reopened
+   via the Back to Background button in the side panel.
+──────────────────────────────────────────────────────────── */
+
+.story-banner {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease;
+}
+
+.story-banner-inner {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 32px 36px;
+    max-width: 520px;
+    width: 90%;
+}
+
+/* Small label tag reading "BACKGROUND" above the banner title */
+.story-banner-tag {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #58a6ff;
+    background: #0d2137;
+    border: 1px solid #1f4e8c;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 2px 8px;
+    margin-bottom: 12px;
+}
+
+.story-banner-title {
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: #e6edf3;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+}
+
+.story-banner-body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #768390;
+    line-height: 1.7;
+    margin: 0 0 12px 0;
+}
+
+/* Bold text inside body paragraphs uses a lighter color for emphasis */
+.story-banner-body strong {
+    color: #c9d1d9;
+}
+
+/* Color legend row at the bottom of the banner */
+.story-banner-legend {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #768390;
+    margin: 16px 0;
+    padding: 12px 0;
+    border-top: 1px solid #1c2430;
+    border-bottom: 1px solid #1c2430;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.story-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Primary call-to-action button that dismisses the banner */
+.story-banner-btn {
+    margin-top: 16px;
+    width: 100%;
+    background: #58a6ff;
+    color: #0d1117;
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.story-banner-btn:hover {
+    background: #79b8ff;
+}
